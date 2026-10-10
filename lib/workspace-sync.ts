@@ -839,7 +839,7 @@ export function seedDemoDataIfEmpty(todayDate: string) {
       status: "已连接",
       sync: "计划每 30 分钟同步",
       connected: true,
-      syncRunCount: 3,
+      syncRunCount: 1,
       lastSyncAt: formatSyncTimestamp(new Date()),
       authKind: "oauth",
       authStatus: "已授权",
