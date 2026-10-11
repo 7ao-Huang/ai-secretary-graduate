@@ -817,7 +817,7 @@ export default function EmailPage() {
 
             <SectionCard
               title="邮箱接入状态"
-              description="这里保留产品说明层，方便你对外展示未来真实邮箱接入后的支持范围。"
+              description="当前已连接的邮箱及同步状态。"
             >
               <div className="space-y-3">
                 {accounts.map((account) => (
@@ -877,7 +877,7 @@ export default function EmailPage() {
 
             <SectionCard
               title="落地顺序"
-              description="这一页的下一步不该模糊，要能清楚说明怎样从原型过渡到真实可用。"
+              description="从原型到真实可用的接入路线。"
             >
               <div className="space-y-3">
                 {landingSteps.map((step, index) => (
@@ -891,23 +891,6 @@ export default function EmailPage() {
                     {step}
                   </div>
                 ))}
-              </div>
-            </SectionCard>
-
-            <SectionCard
-              title="作品表达"
-              description="对外展示时，这页应该突出你的产品会替用户做减法，而不是只把所有邮件重新堆一遍。"
-            >
-              <div className="space-y-4">
-                <div className="rounded-2xl border border-violet-100 bg-violet-50/80 p-4 text-sm leading-6 text-violet-900">
-                  邮件页负责回答“哪些信息值得我现在看”，而不是“我的邮箱里一共有多少封信”。
-                </div>
-                <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4 text-sm leading-6 text-emerald-900">
-                  真正重要的邮件会被转成任务、提醒，必要时还会进一步影响首页日程。
-                </div>
-                <div className="rounded-2xl border border-amber-100 bg-amber-50/80 p-4 text-sm leading-6 text-amber-900">
-                  下一轮最值得继续补的是：把这些连接动作真正替换成 Gmail / Outlook / IMAP 的实际授权流程。
-                </div>
               </div>
             </SectionCard>
           </div>

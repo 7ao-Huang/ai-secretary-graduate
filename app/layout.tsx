@@ -18,8 +18,14 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "MyFlow OS",
-  description: "用于管理个人计划、任务、提醒与邮件优先级的网站骨架",
+  title: {
+    default: "MyFlow OS · AI 秘书工作台",
+    template: "%s · MyFlow OS",
+  },
+  description: "面向即将毕业、方向探索中的你，用月历优先的 AI 秘书帮你聚合邮件、自动改期、守住成长节奏。",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

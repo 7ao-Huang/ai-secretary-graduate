@@ -375,6 +375,42 @@ export function mergeEmailTasksIntoTaskCenter(
   return [...emailTasks, ...manualTasks];
 }
 
+export function addManualTask(params: {
+  title: string;
+  priority?: "高" | "中" | "低";
+  due?: string;
+  reason?: string;
+  plan?: string;
+}): TaskCenterItem {
+  const newTask: TaskCenterItem = {
+    id: createStableId("manual-task", `${params.title}-${Date.now()}`),
+    title: params.title,
+    priority: params.priority ?? "中",
+    due: params.due ?? "下周",
+    status: "待开始",
+    plan: params.plan ?? "来自周回顾",
+    reason: params.reason ?? "从回顾页一键加入的调整动作",
+    sourceType: "manual",
+  };
+
+  if (typeof window !== "undefined") {
+    try {
+      const raw = window.localStorage.getItem(TASK_CENTER_STORAGE_KEY);
+      const existing: TaskCenterItem[] = raw
+        ? (JSON.parse(raw) as PersistedTaskCenterState).tasks ?? []
+        : getDefaultTaskCenterTasks();
+      const next = [newTask, ...existing];
+      window.localStorage.setItem(
+        TASK_CENTER_STORAGE_KEY,
+        JSON.stringify({ tasks: next }),
+      );
+    } catch {
+    }
+  }
+
+  return newTask;
+}
+
 export function getDefaultEmailConnections(): EmailConnectionItem[] {
   return emailAccounts.map((account, index) => ({
     id: `email-account-${index + 1}`,

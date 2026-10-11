@@ -1,8 +1,14 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { Badge, SectionCard } from "@/components/section-card";
 import { reviewPoints } from "@/lib/mock-data";
+import { addManualTask } from "@/lib/workspace-sync";
 
 export default function ReviewPage() {
+  const router = useRouter();
+
   const weeklySignals = [
     {
       label: "本周保留下来的重点",
@@ -42,8 +48,19 @@ export default function ReviewPage() {
   const nextWeekActions = [
     "把每天 17:00 固定为邮件处理时段，只在这个时间集中查看待回复事项。",
     "继续保留首页月历只展示重要事项的策略，不让日常重复安排重新挤占视线。",
-    "给任务页补一层来源联动，让邮件生成的任务能直接解释“为什么现在要做”。",
+    "给任务页补一层来源联动，让邮件生成的任务能直接解释为什么现在要做。",
   ];
+
+  const handleAddToTasks = (action: string) => {
+    const task = addManualTask({
+      title: action.length > 40 ? action.slice(0, 40) + "..." : action,
+      priority: "中",
+      due: "下周",
+      reason: "从周回顾的调整动作一键转入",
+      plan: "下周调整动作",
+    });
+    router.push(`/tasks?focus=manual&taskId=${task.id}`);
+  };
 
   return (
     <AppShell
@@ -134,31 +151,23 @@ export default function ReviewPage() {
                 {nextWeekActions.map((action, index) => (
                   <div
                     key={action}
-                    className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm leading-6 text-slate-600"
+                    className="rounded-2xl border border-slate-100 bg-slate-50 p-4"
                   >
-                    <span className="mr-2 font-semibold text-slate-900">
-                      {index + 1}.
-                    </span>
-                    {action}
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 shrink-0 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700">
+                        {index + 1}
+                      </span>
+                      <p className="flex-1 text-sm leading-6 text-slate-600">{action}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddToTasks(action)}
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-emerald-700"
+                    >
+                      加入下周任务
+                    </button>
                   </div>
                 ))}
-              </div>
-            </SectionCard>
-
-            <SectionCard
-              title="作品表达"
-              description="对外展示时，这页应该让别人看到你的产品会复盘系统本身，而不是只记录情绪。"
-            >
-              <div className="space-y-4">
-                <div className="rounded-2xl border border-violet-100 bg-violet-50/80 p-4 text-sm leading-6 text-violet-900">
-                  回顾页负责回答“这个系统有没有真的帮你减少负担，并且让下周更清楚”。
-                </div>
-                <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4 text-sm leading-6 text-emerald-900">
-                  首页是时间视角，任务页是执行视角，计划页是方向视角，回顾页则是调整视角。
-                </div>
-                <div className="rounded-2xl border border-amber-100 bg-amber-50/80 p-4 text-sm leading-6 text-amber-900">
-                  下一轮最值得继续补的是：把回顾结论一键回写到计划、任务和提醒规则里。
-                </div>
               </div>
             </SectionCard>
           </div>
