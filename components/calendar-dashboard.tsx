@@ -1278,7 +1278,7 @@ export function CalendarDashboard() {
                   type="button"
                   disabled={!day.date}
                   onClick={() => day.date && openDayFlow(day.date)}
-                  className={`group relative min-h-[8.4rem] overflow-hidden rounded-[1.75rem] border px-2.5 py-2.5 text-left transition ${
+                  className={`group relative min-h-[4.2rem] overflow-hidden rounded-[1.75rem] border px-2 py-2 text-left transition sm:min-h-[6rem] sm:px-2.5 sm:py-2.5 md:min-h-[8.4rem] ${
                     day.date
                       ? isSelected
                         ? "border-violet-300 bg-[linear-gradient(180deg,#fff7ed_0%,#f5f3ff_42%,#eff6ff_100%)] shadow-[0_14px_32px_rgba(139,92,246,0.14)]"
@@ -1299,7 +1299,7 @@ export function CalendarDashboard() {
                     <>
                       <span
                         style={{ fontFamily: "var(--font-calendar-day)" }}
-                        className="absolute top-3 left-3 text-[2rem] leading-none font-bold text-slate-800"
+                        className="absolute left-2 top-2 text-lg leading-none font-bold text-slate-800 sm:left-3 sm:top-3 sm:text-2xl md:text-[2rem]"
                       >
                         {day.dayNumber}
                       </span>
@@ -1307,13 +1307,13 @@ export function CalendarDashboard() {
                         <span
                           title={dayMood.label}
                           aria-label={dayMood.label}
-                          className={`absolute top-4 right-4 inline-flex h-3.5 w-3.5 rounded-full border shadow-sm ${dayMood.className}`}
+                          className={`absolute right-2 top-2 inline-flex h-3 w-3 rounded-full border shadow-sm sm:right-4 sm:top-4 sm:h-3.5 sm:w-3.5 ${dayMood.className}`}
                         >
                           <span className="sr-only">{dayMood.label}</span>
                         </span>
                       ) : null}
 
-                      <div className="relative mt-11 space-y-1.5">
+                      <div className="relative mt-11 hidden space-y-1.5 md:block">
                         {day.events.slice(0, 2).map((item) => (
                           <div
                             key={item.id}

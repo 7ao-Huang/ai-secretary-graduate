@@ -15,6 +15,16 @@
   --font-calendar-day: var(--font-nunito);
 }
 
+/* 深色模式：class 策略 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --background: #0b1020;
+  --foreground: #e2e8f0;
+  --app-bg: linear-gradient(180deg, #0b1020 0%, #111833 100%);
+  --app-text: #e2e8f0;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -34,3 +44,40 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* ===== 深色模式：统一覆盖白色卡片 / slate 文字 ===== */
+/* 白色卡片背景 → 深色半透明卡片 */
+.dark .bg-white { background-color: rgb(30 41 59) !important; }
+.dark .bg-white\/35 { background-color: rgb(30 41 59 / 0.35) !important; }
+.dark .bg-white\/50 { background-color: rgb(30 41 59 / 0.50) !important; }
+.dark .bg-white\/70 { background-color: rgb(30 41 59 / 0.70) !important; }
+.dark .bg-white\/78 { background-color: rgb(30 41 59 / 0.78) !important; }
+.dark .bg-white\/80 { background-color: rgb(30 41 59 / 0.80) !important; }
+.dark .bg-white\/82 { background-color: rgb(30 41 59 / 0.82) !important; }
+.dark .bg-white\/85 { background-color: rgb(30 41 59 / 0.85) !important; }
+.dark .bg-white\/88 { background-color: rgb(30 41 59 / 0.88) !important; }
+.dark .bg-white\/90 { background-color: rgb(30 41 59 / 0.90) !important; }
+.dark .bg-white\/95 { background-color: rgb(30 41 59 / 0.95) !important; }
+
+/* 白色边框 → 浅色细边 */
+.dark .border-white { border-color: rgb(148 163 184 / 0.20) !important; }
+.dark .border-white\/70 { border-color: rgb(148 163 184 / 0.18) !important; }
+.dark .border-white\/75 { border-color: rgb(148 163 184 / 0.18) !important; }
+.dark .border-white\/80 { border-color: rgb(148 163 184 / 0.20) !important; }
+
+/* slate 浅背景 → 深色 */
+.dark .bg-slate-50 { background-color: rgb(15 23 42) !important; }
+.dark .bg-slate-100 { background-color: rgb(30 41 59) !important; }
+.dark .bg-slate-200 { background-color: rgb(51 65 85) !important; }
+
+/* slate 边框 */
+.dark .border-slate-100 { border-color: rgb(51 65 85 / 0.6) !important; }
+.dark .border-slate-200 { border-color: rgb(51 65 85 / 0.7) !important; }
+
+/* slate 文字色阶反转 */
+.dark .text-slate-900 { color: rgb(241 245 249) !important; }
+.dark .text-slate-800 { color: rgb(226 232 240) !important; }
+.dark .text-slate-700 { color: rgb(203 213 225) !important; }
+.dark .text-slate-600 { color: rgb(148 163 184) !important; }
+.dark .text-slate-500 { color: rgb(100 116 139) !important; }
+.dark .text-slate-400 { color: rgb(71 85 105) !important; }
