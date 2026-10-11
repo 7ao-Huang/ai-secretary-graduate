@@ -55,6 +55,8 @@ export default function EmailPage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [connectionDraft, setConnectionDraft] = useState<ConnectionDraft | null>(null);
   const [connectionError, setConnectionError] = useState("");
+  const [syncLoadingId, setSyncLoadingId] = useState<string | null>(null);
+  const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   useEffect(() => {
     let nextAccounts = getDefaultEmailConnections();
@@ -225,7 +227,20 @@ export default function EmailPage() {
       );
       return;
     }
-    setAccounts((current) => markEmailAccountSync(current, accountId));
+
+    setSyncLoadingId(accountId);
+    setSyncFeedback(null);
+    setConnectionError("");
+
+    window.setTimeout(() => {
+      const beforeCount = account.syncRunCount ?? 0;
+      setAccounts((current) => markEmailAccountSync(current, accountId));
+      setSyncLoadingId(null);
+      setSyncFeedback(
+        `已完成第 ${beforeCount + 1} 批同步，首页「最近邮件变化」和任务中心会自动更新。`,
+      );
+      window.setTimeout(() => setSyncFeedback(null), 4000);
+    }, 900);
   }
 
   function closeConnectionFlow() {
@@ -406,6 +421,11 @@ export default function EmailPage() {
       }}
     >
       <div className="space-y-6">
+        {syncFeedback ? (
+          <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4 text-sm font-medium text-emerald-700">
+            {syncFeedback}
+          </div>
+        ) : null}
         <section className="grid gap-4 md:grid-cols-3">
           {mailboxHealth.map((item) => (
             <div
@@ -539,12 +559,21 @@ export default function EmailPage() {
                               <button
                                 type="button"
                                 onClick={() => handleSync(account.id)}
-                                disabled={!readyForSync}
+                                disabled={!readyForSync || syncLoadingId === account.id}
                                 title={syncDisabledReason}
-                                className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-violet-200 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-700"
+                                className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-violet-200 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-700"
                               >
-                                立即同步
-                                {syncDisabledReason ? `（${syncDisabledReason}）` : ""}
+                                {syncLoadingId === account.id ? (
+                                  <>
+                                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-300 border-t-violet-600" />
+                                    同步中…
+                                  </>
+                                ) : (
+                                  <>
+                                    立即同步
+                                    {syncDisabledReason ? `（${syncDisabledReason}）` : ""}
+                                  </>
+                                )}
                               </button>
                               <button
                                 type="button"

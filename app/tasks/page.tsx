@@ -143,6 +143,20 @@ export default function TasksPage() {
   const highPriorityCount = taskItems.filter((task) => task.priority === "高").length;
   const emailGeneratedCount = taskItems.filter((task) => task.sourceType === "email").length;
 
+  function handleToggleComplete(taskId: string) {
+    setTaskItems((current) =>
+      current.map((task) =>
+        task.id === taskId
+          ? { ...task, status: task.status === "已完成" ? "待开始" : "已完成" }
+          : task,
+      ),
+    );
+  }
+
+  function handleDeleteTask(taskId: string) {
+    setTaskItems((current) => current.filter((task) => task.id !== taskId));
+  }
+
   return (
     <AppShell
       title="任务中心"
@@ -198,12 +212,13 @@ export default function TasksPage() {
             title="任务列表"
             description="这一页不只是堆待办，而是把今天该推进的、需要回复的、和可以后移的任务放在同一个视图里。"
           >
-            <div className="hidden grid-cols-[2.1fr_1fr_1fr_1fr_1.1fr] gap-3 bg-slate-50 px-5 py-4 text-sm font-medium text-slate-500 md:grid">
+            <div className="hidden grid-cols-[2.1fr_1fr_1fr_1fr_1.1fr_0.8fr] gap-3 bg-slate-50 px-5 py-4 text-sm font-medium text-slate-500 md:grid">
               <div>任务</div>
               <div>优先级</div>
               <div>截止时间</div>
               <div>状态</div>
               <div>首页联动</div>
+              <div>操作</div>
             </div>
             <div className="divide-y divide-slate-100 border-t border-slate-100">
               {taskItems.map((task, index) => {
@@ -220,11 +235,11 @@ export default function TasksPage() {
                   <div
                     key={`${task.plan}-${task.title}`}
                     id={`task-row-${task.id}`}
-                    className={`grid grid-cols-1 gap-4 px-5 py-5 md:grid-cols-[2.1fr_1fr_1fr_1fr_1.1fr] md:items-start transition-all duration-300 ease-out ${
+                    className={`grid grid-cols-1 gap-4 px-5 py-5 md:grid-cols-[2.1fr_1fr_1fr_1fr_1.1fr_0.8fr] md:items-start transition-all duration-300 ease-out ${
                       isFocused || hasFilterBlink
                         ? "bg-[linear-gradient(180deg,rgba(251,191,36,0.10),rgba(251,191,36,0.02))] shadow-[inset_4px_0_0_rgba(251,191,36,0.7)]"
                         : ""
-                    }`}
+                    } ${task.status === "已完成" ? "opacity-60" : ""}`}
                   >
                     {isFirstEmailRow ? (
                       <span id="task-center-email-anchor" className="sr-only">
@@ -233,7 +248,7 @@ export default function TasksPage() {
                     ) : null}
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-medium text-slate-900">{task.title}</p>
+                        <p className={`font-medium text-slate-900 ${task.status === "已完成" ? "line-through" : ""}`}>{task.title}</p>
                         <Badge tone="default">{task.plan}</Badge>
                         {task.sourceType === "email" ? (
                           <Badge tone="medium">邮件同步</Badge>
@@ -278,6 +293,26 @@ export default function TasksPage() {
                       >
                         定位到当日提醒
                       </Link>
+                    </div>
+                    <div className="flex flex-wrap gap-2 md:pt-1">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleComplete(task.id)}
+                        className={`inline-flex items-center justify-center rounded-2xl px-3 py-2 text-sm font-medium transition ${
+                          task.status === "已完成"
+                            ? "border border-slate-200 bg-slate-100 text-slate-500 hover:bg-slate-200"
+                            : "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                        }`}
+                      >
+                        {task.status === "已完成" ? "取消完成" : "标记完成"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteTask(task.id)}
+                        className="inline-flex items-center justify-center rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700 transition hover:bg-rose-100"
+                      >
+                        删除
+                      </button>
                     </div>
                   </div>
                 );

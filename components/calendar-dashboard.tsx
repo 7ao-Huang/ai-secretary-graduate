@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -97,6 +98,7 @@ const weekdayOptions = [
 ];
 
 export function CalendarDashboard() {
+  const router = useRouter();
   const todayDate = getTodayDate();
   const [selectedDate, setSelectedDate] = useState(todayDate);
   const [viewedMonth, setViewedMonth] = useState(getMonthStart(todayDate));
@@ -253,6 +255,27 @@ export function CalendarDashboard() {
       setTopViewMode("month");
     });
   }, [isHydrated, todayDate]);
+
+  useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search.replace(/^\?/, ""));
+    params.set("date", selectedDate);
+    if (topViewMode === "day") {
+      params.set("view", "day");
+    } else {
+      params.delete("view");
+      params.delete("focus");
+    }
+
+    const query = params.toString();
+    const nextUrl = query ? `/?${query}` : "/";
+    if (nextUrl !== `${window.location.pathname}${window.location.search}`) {
+      router.replace(nextUrl, { scroll: false });
+    }
+  }, [isHydrated, selectedDate, topViewMode, router]);
 
   useEffect(() => {
     if (!isHydrated) {
